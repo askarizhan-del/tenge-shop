@@ -573,10 +573,6 @@ export const products: Product[] = [
   },
 ]
 
-export const getProductsByCategory = (categoryId: string) => {
-  if (categoryId === 'all') return products
-  return products.filter(p => p.category === categoryId)
-}
 
 export const getProductBySlug = (slug: string) => {
   return products.find(p => p.slug === slug)
