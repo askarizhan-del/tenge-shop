@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 
 type Product = {
   id: string
@@ -13,14 +13,22 @@ type CartContextType = {
   addToCart: (product: Product) => void
 }
 
-const CartContext = createContext<CartContextType | null>(null)
+const CartContext = createContext<CartContextType | undefined>(undefined)
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<Product[]>([])
 
   const addToCart = (product: Product) => {
-    setCart((prev) => [...prev, product])
+    setCart((prev) => {
+      const updated = [...prev, product]
+      console.log('🛒 Cart updated:', updated)
+      return updated
+    })
   }
+
+  useEffect(() => {
+    console.log('🧺 Current cart:', cart)
+  }, [cart])
 
   return (
     <CartContext.Provider value={{ cart, addToCart }}>
@@ -31,6 +39,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
 export function useCart() {
   const context = useContext(CartContext)
-  if (!context) throw new Error('useCart must be used inside CartProvider')
+
+  if (context === undefined) {
+    throw new Error('❌ useCart must be used inside CartProvider')
+  }
+
   return context
 }
