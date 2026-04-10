@@ -1,12 +1,13 @@
 'use client'
 import Link from 'next/link'
 import type { Product } from '@/data/products'
-
+import { useCart } from '@/components/CartContext'
 interface ProductCardProps {
   product: Product
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const { addToCart } = useCart()
   const discount = Math.round((1 - product.priceKZT / product.oldPriceKZT) * 100)
 
   return (
@@ -60,7 +61,14 @@ export default function ProductCard({ product }: ProductCardProps) {
               )}
             </div>
             <button
-              onClick={(e) => { e.preventDefault(); /* TODO: add to cart */ }}
+              onClick={(e) => {
+  e.preventDefault()
+  addToCart({
+    id: product.id,
+    name: product.name,
+    priceKZT: product.priceKZT,
+  })
+}}
               className="p-2 rounded-xl transition-all"
               style={{ background: '#1a6b3c', color: 'white' }}
               title="В корзину"
