@@ -17,15 +17,32 @@ export interface Product {
   image?: string
 }
 
+// Главные категории
 export const CATEGORIES = [
   { id: 'all', name: 'Все товары', icon: '🛍️' },
-  { id: 'face', name: 'Лицо', icon: '✨' },
-  { id: 'body', name: 'Тело', icon: '💆' },
-  { id: 'hair', name: 'Волосы', icon: '💇' },
-  { id: 'universal', name: 'Гидролаты', icon: '💧' },
-  { id: 'home', name: 'Дом', icon: '🏠' },
-  { id: 'aroma', name: 'Ароматерапия', icon: '🌿' },
+  { id: 'self-care', name: 'Уход за собой', icon: '✨' },
+  { id: 'home-goods', name: 'Товары для дома', icon: '🏠' },
+  { id: 'repair', name: 'Ремонт дома', icon: '🔧' },
+  { id: 'misc', name: 'Разное', icon: '📦' },
 ]
+
+// Подкатегории
+export const SUBCATEGORIES = [
+  { id: 'face', name: 'Уход за лицом', icon: '✨', parent: 'self-care' },
+  { id: 'body', name: 'Уход за телом', icon: '💆', parent: 'self-care' },
+  { id: 'hair', name: 'Уход за волосами', icon: '💇', parent: 'self-care' },
+  { id: 'universal', name: 'Гидролаты', icon: '💧', parent: 'self-care' },
+  { id: 'aroma', name: 'Ароматерапия', icon: '🌿', parent: 'self-care' },
+  { id: 'home', name: 'Для дома', icon: '🏠', parent: 'home-goods' },
+]
+
+export function getParentCategory(category: string): string {
+  const selfCare = ['face', 'body', 'hair', 'universal', 'aroma']
+  if (selfCare.includes(category)) return 'self-care'
+  if (category === 'home') return 'home-goods'
+  if (category === 'repair') return 'repair'
+  return 'misc'
+}
 
 export const products: Product[] = [
   {
@@ -565,5 +582,13 @@ export const getProductBySlug = (slug: string) => {
   return products.find(p => p.slug === slug)
 }
 
+export const getProductsByCategory = (categoryId: string) => {
+  if (categoryId === 'all') return products
+  const mainCatIds = ['self-care', 'home-goods', 'repair', 'misc']
+  if (mainCatIds.includes(categoryId)) {
+    return products.filter(p => getParentCategory(p.category) === categoryId)
+  }
+  return products.filter(p => p.category === categoryId)
+}
+
 export const getBestsellers = () => products.filter(p => p.isBestseller).slice(0, 8)
-export const getNewProducts = () => products.filter(p => p.isNew).slice(0, 4)
