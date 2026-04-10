@@ -64,8 +64,8 @@ export default function Footer() {
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-white/60 text-sm">
                 <span>📱</span>
-                <a href="https://wa.me/77000000000" className="hover:text-white transition-colors">
-                  WhatsApp: +7 775 122 90 89
+                <a href="https://wa.me/77053554926" className="hover:text-white transition-colors">
+                  WhatsApp: +7 705 355 49 26
                 </a>
               </div>
               <div className="flex items-center gap-2 text-white/60 text-sm">
