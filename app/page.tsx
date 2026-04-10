@@ -38,7 +38,7 @@ export default function HomePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                 </svg>
               </Link>
-              <a href="https://wa.me/77751229089"
+              <a href="https://wa.me/77053554926"
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-lg border-2 border-white/30 text-white hover:bg-white/10 transition-all">
                 📱 WhatsApp
               </a>
@@ -140,7 +140,7 @@ export default function HomePage() {
           <p className="text-white/70 text-lg mb-8">
             Специальные цены для магазинов, салонов красоты и корпоративных клиентов. Свяжитесь с нами для обсуждения условий.
           </p>
-          <a href="https://wa.me/77751229089?text=Здравствуйте!%20Интересует%20оптовый%20заказ%20на%20косметику%20Сокровища%20Крыма"
+          <a href="https://wa.me/77053554926?text=Здравствуйте!%20Интересует%20оптовый%20заказ%20на%20косметику%20Сокровища%20Крыма"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105"
             style={{ background: '#c9a227', color: '#0f1c14' }}>
             📱 Написать в WhatsApp
