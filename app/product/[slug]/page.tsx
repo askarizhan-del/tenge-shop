@@ -1,13 +1,15 @@
+'use client'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getProductBySlug, products, CATEGORIES } from '@/data/products'
 import ProductCard from '@/components/ProductCard'
-
+import { useCart } from '@/components/CartContext'
 export async function generateStaticParams() {
   return products.map(p => ({ slug: p.slug }))
 }
 
-export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+export default function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { addToCart } = useCart()
   const { slug } = await params
   const product = getProductBySlug(slug)
   if (!product) notFound()
@@ -93,10 +95,21 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <button
               className="w-full py-4 rounded-xl font-bold text-lg transition-all hover:opacity-90 hover:-translate-y-0.5"
               style={{ background: '#1a6b3c', color: 'white' }}>
-              🛒 В корзину
+              <button
+  onClick={() =>
+    addToCart({
+      id: product.id,
+      name: product.name,
+      priceKZT: product.priceKZT,
+    })
+  }
+  className="w-full py-4 rounded-xl font-bold text-lg transition-all hover:opacity-90 hover:-translate-y-0.5"
+  style={{ background: '#1a6b3c', color: 'white' }}>
+  🛒 В корзину
+</button>
             </button>
             <a
-              href={`https://wa.me/77000000000?text=Здравствуйте!%20Хочу%20заказать%20${encodeURIComponent(product.name)}`}
+              href={`https://wa.me/77053554926?text=Здравствуйте!%20Хочу%20заказать%20${encodeURIComponent(product.name)}`}
               className="w-full py-4 rounded-xl font-bold text-lg text-center border-2 transition-all hover:bg-gray-50"
               style={{ borderColor: '#1a6b3c', color: '#1a6b3c' }}>
               📱 Заказать через WhatsApp
