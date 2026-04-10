@@ -65,7 +65,7 @@ export default function Footer() {
               <div className="flex items-center gap-2 text-white/60 text-sm">
                 <span>📱</span>
                 <a href="https://wa.me/77000000000" className="hover:text-white transition-colors">
-                  WhatsApp: +7 700 000 00 00
+                  WhatsApp: +7 775 122 90 89
                 </a>
               </div>
               <div className="flex items-center gap-2 text-white/60 text-sm">
@@ -76,7 +76,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2 text-white/60 text-sm">
                 <span>🕐</span>
-                <span>Пн–Пт 9:00–18:00</span>
+                <span>24/7 Круглосуточнно</span>
               </div>
             </div>
             <div className="mt-4 flex gap-3">
@@ -87,7 +87,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-white/10 mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-white/40 text-sm">© 2024 TENGE.SHOP. Все права защищены.</p>
+          <p className="text-white/40 text-sm">© 2026 TENGE.SHOP.ТОО CAPITAL-TRADE.KZ Все права защищены.</p>
           <p className="text-white/40 text-sm">Казахстан 🇰🇿</p>
         </div>
       </div>
