@@ -10,7 +10,7 @@ export async function generateStaticParams() {
 
 export default function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { addToCart } = useCart()
-  const { slug } = await params
+  cconst { slug } = params
   const product = getProductBySlug(slug)
   if (!product) notFound()
 
@@ -93,9 +93,17 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
           {/* Add to cart */}
           <div className="flex flex-col gap-3 mb-6">
             <button
-              className="w-full py-4 rounded-xl font-bold text-lg transition-all hover:opacity-90 hover:-translate-y-0.5"
-              style={{ background: '#1a6b3c', color: 'white' }}>
-              <button
+  onClick={() =>
+    addToCart({
+      id: product.id,
+      name: product.name,
+      priceKZT: product.priceKZT,
+    })
+  }
+  className="w-full py-4 rounded-xl font-bold text-lg transition-all hover:opacity-90 hover:-translate-y-0.5"
+  style={{ background: '#1a6b3c', color: 'white' }}>
+  🛒 В корзину
+</button>
   onClick={() =>
     addToCart({
       id: product.id,
