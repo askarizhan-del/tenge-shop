@@ -25,7 +25,7 @@ export default function HomePage() {
               для Казахстана
             </h1>
             <p className="text-white/70 text-lg mb-8 leading-relaxed">
-              Уход за собой, товары для дома, ремонт и многое другое. Без переплат, без посредников. Доставка по всему Казахстану.
+              Без переплат, без посредников. Доставка по всему Казахстану.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link href="/catalog" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105" style={{ background: '#c9a227', color: '#0f1c14' }}>
@@ -82,22 +82,6 @@ export default function HomePage() {
           </div>
         </section>
       )}
-
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { icon: '✅', title: 'Проверенные товары', desc: 'Только качественные товары от надёжных поставщиков.' },
-            { icon: '₸', title: 'Честные цены', desc: 'Прямые поставки без посредников. Платите честную цену в тенге.' },
-            { icon: '🚚', title: 'Быстрая доставка', desc: 'Доставляем по всему Казахстану за 2–5 рабочих дней.' },
-          ].map(item => (
-            <div key={item.title} className="bg-white rounded-2xl p-6 border border-gray-100 card-hover">
-              <div className="text-4xl mb-4">{item.icon}</div>
-              <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
 
       <section className="py-16" style={{ background: 'linear-gradient(135deg, #1a6b3c, #0a2d1c)' }}>
         <div className="max-w-4xl mx-auto px-4 text-center">
