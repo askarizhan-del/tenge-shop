@@ -12,9 +12,6 @@ export default function Footer() {
               </div>
               <span className="font-bold text-xl">TENGE<span style={{ color: '#c9a227' }}>.SHOP</span></span>
             </div>
-            <p className="text-white/60 text-sm leading-relaxed">
-              Честные цены в тенге. Товары для дома, ухода за собой, ремонта и многого другого. Доставка по всему Казахстану.
-            </p>
           </div>
 
           <div>
@@ -62,7 +59,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2 text-white/60 text-sm">
                 <span>🕐</span>
-                <span>Пн–Пт: 9:00–18:00</span>
+                <span>24/7</span>
               </div>
             </div>
           </div>
