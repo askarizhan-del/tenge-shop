@@ -2,97 +2,122 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import ProductCard from '@/components/ProductCard'
-import { getProductsByCategory, CATEGORIES, SUBCATEGORIES } from '@/data/products'
+import { getProductsByCategory, searchProducts, CATEGORIES } from '@/data/products'
 
 function CatalogContent() {
   const searchParams = useSearchParams()
   const catParam = searchParams.get('cat') || 'all'
   const [activeCategory, setActiveCategory] = useState(catParam)
-  const [activeSubcategory, setActiveSubcategory] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState('default')
 
-  useEffect(() => { setActiveCategory(catParam); setActiveSubcategory('') }, [catParam])
+  useEffect(() => { setActiveCategory(catParam) }, [catParam])
 
-  const currentSubcategories = SUBCATEGORIES.filter(s => s.parent === activeCategory)
-  let filtered = activeSubcategory ? getProductsByCategory(activeSubcategory) : getProductsByCategory(activeCategory)
+  const realCategories = CATEGORIES.filter(c => !c.comingSoon)
+  const comingCategories = CATEGORIES.filter(c => c.comingSoon)
 
-  if (searchQuery) {
-    const q = searchQuery.toLowerCase()
-    filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q))
-  }
-  if (sortBy === 'price_asc') filtered = [...filtered].sort((a, b) => a.priceKZT - b.priceKZT)
-  if (sortBy === 'price_desc') filtered = [...filtered].sort((a, b) => b.priceKZT - a.priceKZT)
+  let filtered = searchQuery
+    ? searchProducts(searchQuery)
+    : getProductsByCategory(activeCategory)
+
+  if (sortBy === 'price_asc') filtered = [...filtered].sort((a, b) => a.price - b.price)
+  if (sortBy === 'price_desc') filtered = [...filtered].sort((a, b) => b.price - a.price)
+  if (sortBy === 'new') filtered = filtered.filter(p => p.isNew)
+  if (sortBy === 'hot') filtered = filtered.filter(p => p.isBestseller)
 
   const activeCat = CATEGORIES.find(c => c.id === activeCategory)
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">{activeCat ? `${activeCat.icon} ${activeCat.name}` : 'Каталог'}</h1>
-        <p className="text-gray-500 mt-1">{filtered.length} товаров</p>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">
+          {activeCat ? `${activeCat.icon} ${activeCat.name}` : 'Каталог'}
+        </h1>
+        <p className="text-gray-500 text-sm mt-1">{filtered.length} товаров</p>
       </div>
-      <div className="flex flex-col lg:flex-row gap-6">
-        <aside className="w-full lg:w-56 flex-shrink-0">
-          <div className="bg-white rounded-2xl border border-gray-100 p-4 sticky top-20">
-            <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">Категории</h3>
-            <ul className="space-y-1">
-              {CATEGORIES.map(cat => (
-                <li key={cat.id}>
-                  <button onClick={() => { setActiveCategory(cat.id); setActiveSubcategory('') }}
-                    className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all text-left"
-                    style={activeCategory === cat.id && !activeSubcategory ? { background: '#1a6b3c', color: 'white' } : { color: '#4b5563' }}>
-                    <span>{cat.icon}</span><span>{cat.name}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-            {currentSubcategories.length > 0 && (
-              <div className="mt-4">
-                <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">Подкатегории</h3>
-                <ul className="space-y-1">
-                  {currentSubcategories.map(sub => (
-                    <li key={sub.id}>
-                      <button onClick={() => setActiveSubcategory(activeSubcategory === sub.id ? '' : sub.id)}
-                        className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all text-left"
-                        style={activeSubcategory === sub.id ? { background: '#c9a227', color: 'white', fontWeight: 600 } : { color: '#6b7280' }}>
-                        <span>{sub.icon}</span><span>{sub.name}</span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        </aside>
-        <div className="flex-1">
-          <div className="flex flex-col sm:flex-row gap-3 mb-6">
-            <div className="relative flex-1">
-              <input type="text" placeholder="Поиск товаров..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none" />
-            </div>
-            <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white">
-              <option value="default">По умолчанию</option>
-              <option value="price_asc">Цена: по возрастанию</option>
-              <option value="price_desc">Цена: по убыванию</option>
-            </select>
-          </div>
-          {filtered.length === 0 ? (
-            <div className="text-center py-16 text-gray-400"><p className="text-4xl mb-4">🔍</p><p>Товары не найдены</p></div>
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
-              {filtered.map(product => <ProductCard key={product.id} product={product} />)}
-            </div>
-          )}
+
+      <div className="mb-6">
+        <input
+          type="text"
+          placeholder="Поиск по каталогу..."
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          className="w-full max-w-md px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-300 text-sm"
+        />
+      </div>
+
+      <div className="flex gap-2 flex-wrap mb-4">
+        {realCategories.map(cat => (
+          <button
+            key={cat.id}
+            onClick={() => { setActiveCategory(cat.id); setSearchQuery('') }}
+            className="px-3 py-1.5 rounded-full text-sm font-medium transition-all"
+            style={activeCategory === cat.id
+              ? { background: '#1a6b3c', color: 'white' }
+              : { background: '#f3f4f6', color: '#374151' }}
+          >
+            {cat.icon} {cat.name}
+          </button>
+        ))}
+      </div>
+
+      {comingCategories.length > 0 && (
+        <div className="flex gap-2 flex-wrap mb-6">
+          {comingCategories.map(cat => (
+            <span
+              key={cat.id}
+              className="px-3 py-1.5 rounded-full text-sm font-medium opacity-50 cursor-not-allowed"
+              style={{ background: '#f3f4f6', color: '#9ca3af' }}
+              title="Скоро в продаже"
+            >
+              {cat.icon} {cat.name} <span className="text-xs">скоро</span>
+            </span>
+          ))}
         </div>
+      )}
+
+      <div className="flex items-center gap-3 mb-6 flex-wrap">
+        <span className="text-sm text-gray-500">Сортировка:</span>
+        {[
+          { value: 'default', label: 'По умолчанию' },
+          { value: 'price_asc', label: 'Дешевле' },
+          { value: 'price_desc', label: 'Дороже' },
+          { value: 'hot', label: '🔥 Хиты' },
+          { value: 'new', label: '🆕 Новинки' },
+        ].map(opt => (
+          <button
+            key={opt.value}
+            onClick={() => setSortBy(opt.value)}
+            className="px-3 py-1.5 rounded-full text-xs font-medium transition-all"
+            style={sortBy === opt.value
+              ? { background: '#c9a227', color: 'white' }
+              : { background: '#f3f4f6', color: '#374151' }}
+          >
+            {opt.label}
+          </button>
+        ))}
       </div>
+
+      {filtered.length > 0 ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {filtered.map(product => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-16 text-gray-400">
+          <p className="text-4xl mb-3">🔍</p>
+          <p className="text-lg font-medium">Ничего не найдено</p>
+          <p className="text-sm">Попробуйте другой запрос или категорию</p>
+        </div>
+      )}
     </div>
   )
 }
 
 export default function CatalogPage() {
   return (
-    <Suspense fallback={<div className="flex justify-center py-20 text-gray-400">Загрузка...</div>}>
+    <Suspense fallback={<div className="flex justify-center py-20"><div className="w-8 h-8 border-2 border-green-600 border-t-transparent rounded-full animate-spin" /></div>}>
       <CatalogContent />
     </Suspense>
   )
