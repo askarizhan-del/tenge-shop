@@ -21,7 +21,7 @@ export default function CartPage() {
     )
   }
 
-  const orderText = items.map(i => `• ${i.product.name} × ${i.quantity} = ${(i.product.priceKZT * i.quantity).toLocaleString('ru-KZ')} ₸`).join('\n')
+  const orderText = items.map(i => `• ${i.product.name} × ${i.quantity} = ${(i.product.price * i.quantity).toLocaleString('ru-KZ')} ₸`).join('\n')
   const waUrl = `https://wa.me/77053554926?text=${encodeURIComponent(`Здравствуйте! Хочу оформить заказ:\n\n${orderText}\n\nИтого: ${totalPrice.toLocaleString('ru-KZ')} ₸`)}`
 
   return (
@@ -39,8 +39,7 @@ export default function CartPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <Link href={`/product/${product.slug}`} className="font-semibold text-gray-900 text-sm hover:text-green-700 line-clamp-2">{product.name}</Link>
-                <p className="text-xs text-gray-400 mt-0.5">{product.volume}</p>
-                <p className="font-bold mt-1" style={{ color: '#1a6b3c' }}>{(product.priceKZT * quantity).toLocaleString('ru-KZ')} ₸</p>
+                <p className="font-bold mt-1" style={{ color: '#1a6b3c' }}>{(product.price * quantity).toLocaleString('ru-KZ')} ₸</p>
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
                 <button onClick={() => updateQuantity(product.id, quantity - 1)} className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center font-bold text-gray-600">−</button>
